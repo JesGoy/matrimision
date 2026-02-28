@@ -1,11 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Star, Radio, Heart } from "lucide-react"
+import { toast } from "sonner"
 import { Progress } from "@/components/ui/progress"
 import { MissionCard } from "@/components/mission-card"
+import { getAblyRealtimeClient } from "@/lib/ably/client"
+import { MISSION_UPDATED_EVENT, MISSIONS_CHANNEL } from "@/lib/ably/constants"
 import type { MissionView } from "@/lib/types/game"
 
 type MissionsResponse = {
@@ -25,6 +28,8 @@ export function MissionsContent() {
   const [totalPoints, setTotalPoints] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const hasLoadedOnceRef = useRef(false)
+  const missionsRef = useRef<MissionView[]>([])
 
   async function loadMissions() {
     try {
@@ -46,8 +51,33 @@ export function MissionsContent() {
       }
 
       setGuestName(data.guest.displayName)
+
+      if (hasLoadedOnceRef.current) {
+        const previousStatusById = new Map(
+          missionsRef.current.map((mission) => [mission.id, mission.status])
+        )
+
+        data.missions.forEach((mission) => {
+          const previousStatus = previousStatusById.get(mission.id)
+
+          if (previousStatus === "locked" && mission.status === "available") {
+            toast.success("Nueva misión desbloqueada", {
+              description: mission.title,
+            })
+          }
+
+          if (previousStatus === "available" && mission.status === "locked") {
+            toast("Misión bloqueada", {
+              description: mission.title,
+            })
+          }
+        })
+      }
+
       setMissions(data.missions)
+      missionsRef.current = data.missions
       setTotalPoints(data.totalPoints)
+      hasLoadedOnceRef.current = true
     } catch {
       setError("No se pudo conectar con el servidor")
     } finally {
@@ -57,6 +87,19 @@ export function MissionsContent() {
 
   useEffect(() => {
     void loadMissions()
+
+    const ably = getAblyRealtimeClient()
+    const channel = ably.channels.get(MISSIONS_CHANNEL)
+
+    const listener = () => {
+      void loadMissions()
+    }
+
+    channel.subscribe(MISSION_UPDATED_EVENT, listener)
+
+    return () => {
+      channel.unsubscribe(MISSION_UPDATED_EVENT, listener)
+    }
   }, [])
 
   const completedCount = missions.filter((m) => m.status === "completed").length
@@ -94,11 +137,13 @@ export function MissionsContent() {
       }
     }
 
-    setMissions((current) =>
-      current.map((mission) =>
+    setMissions((current) => {
+      const next = current.map((mission) =>
         mission.id === missionId ? { ...mission, status: "completed" } : mission
       )
-    )
+      missionsRef.current = next
+      return next
+    })
 
     setTotalPoints((currentPoints) => currentPoints + data.mission.points)
     return true

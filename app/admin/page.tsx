@@ -34,6 +34,24 @@ const emptyDraft: DraftMission = {
   active: true,
 }
 
+function validateMissionInput(input: DraftMission): string | null {
+  const title = input.title.trim()
+  const description = input.description.trim()
+  const points = Number(input.points)
+
+  if (title.length < 3 || title.length > 120) {
+    return "El título debe tener entre 3 y 120 caracteres"
+  }
+  if (description.length < 8 || description.length > 500) {
+    return "La descripción debe tener entre 8 y 500 caracteres"
+  }
+  if (!Number.isInteger(points) || points < 1 || points > 999) {
+    return "Los puntos deben ser un número entero entre 1 y 999"
+  }
+
+  return null
+}
+
 export default function AdminMissionsPage() {
   const [missions, setMissions] = useState<AdminMission[]>([])
   const [drafts, setDrafts] = useState<Record<string, DraftMission>>({})
@@ -151,6 +169,13 @@ export default function AdminMissionsPage() {
   )
 
   async function createMission() {
+    const validationError = validateMissionInput(newMission)
+    if (validationError) {
+      setError(validationError)
+      setSuccess(null)
+      return
+    }
+
     setCreating(true)
     setError(null)
     setSuccess(null)
@@ -159,8 +184,8 @@ export default function AdminMissionsPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        title: newMission.title,
-        description: newMission.description,
+        title: newMission.title.trim(),
+        description: newMission.description.trim(),
         points: Number(newMission.points),
         active: newMission.active,
       }),
@@ -194,6 +219,13 @@ export default function AdminMissionsPage() {
     const draft = drafts[id]
     if (!draft) return
 
+    const validationError = validateMissionInput(draft)
+    if (validationError) {
+      setError(validationError)
+      setSuccess(null)
+      return
+    }
+
     setSavingId(id)
     setError(null)
     setSuccess(null)
@@ -203,8 +235,8 @@ export default function AdminMissionsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id,
-        title: draft.title,
-        description: draft.description,
+        title: draft.title.trim(),
+        description: draft.description.trim(),
         points: Number(draft.points),
         active: draft.active,
       }),
@@ -241,6 +273,8 @@ export default function AdminMissionsPage() {
       </main>
     )
   }
+
+  const createValidationError = validateMissionInput(newMission)
 
   if (forbidden) {
     return (
@@ -307,7 +341,7 @@ export default function AdminMissionsPage() {
 
             <button
               type="button"
-              disabled={creating}
+              disabled={creating || Boolean(createValidationError)}
               onClick={() => void createMission()}
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-70"
             >
@@ -387,6 +421,7 @@ export default function AdminMissionsPage() {
           {sortedMissions.map((mission) => {
             const draft = drafts[mission.id]
             if (!draft) return null
+            const saveValidationError = validateMissionInput(draft)
 
             return (
               <article key={mission.id} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -422,7 +457,7 @@ export default function AdminMissionsPage() {
 
                   <button
                     type="button"
-                    disabled={savingId === mission.id}
+                    disabled={savingId === mission.id || Boolean(saveValidationError)}
                     onClick={() => void saveMission(mission.id)}
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-70"
                   >
