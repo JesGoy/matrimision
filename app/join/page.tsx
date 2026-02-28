@@ -72,14 +72,14 @@ export default function JoinPage() {
         <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-blush/30 blur-3xl" />
       </div>
 
-      <div className="relative z-10 flex w-full max-w-md flex-col items-center">
+      <div className="relative z-10 flex w-full max-w-md flex-col items-center py-6 sm:py-0">
         {/* Logo area */}
         <div className="mb-8 flex flex-col items-center gap-3">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
             <Heart className="h-8 w-8 text-primary" />
           </div>
           <div className="text-center">
-            <h1 className="font-serif text-4xl font-bold tracking-tight text-foreground">
+            <h1 className="font-serif text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               MatriMision
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -89,7 +89,7 @@ export default function JoinPage() {
         </div>
 
         {/* Card */}
-        <div className="w-full rounded-2xl border border-border bg-card p-8 shadow-sm">
+        <div className="w-full rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
           <div className="mb-6 text-center">
             <h2 className="font-serif text-xl font-semibold text-foreground">
               Bienvenido a la mision

@@ -290,12 +290,12 @@ export default function AdminMissionsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-8">
+    <main className="min-h-screen bg-background px-4 py-5 sm:py-8">
       <div className="mx-auto max-w-4xl space-y-6">
-        <header className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <header className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
           <div className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            <h1 className="font-serif text-2xl font-bold text-foreground">Panel admin de misiones</h1>
+            <h1 className="font-serif text-xl font-bold text-foreground sm:text-2xl">Panel admin de misiones</h1>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
             Crea, edita, bloquea y desbloquea misiones en tiempo real.
@@ -304,7 +304,7 @@ export default function AdminMissionsPage() {
           {success && <p className="mt-3 text-sm text-primary">{success}</p>}
         </header>
 
-        <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <section className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <h2 className="mb-4 text-base font-semibold text-foreground">Crear misión</h2>
           <div className="grid gap-3 sm:grid-cols-2">
             <input
@@ -328,7 +328,7 @@ export default function AdminMissionsPage() {
               className="sm:col-span-2 min-h-24 rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground"
             />
           </div>
-          <div className="mt-3 flex items-center justify-between">
+          <div className="mt-3 flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
             <label className="flex items-center gap-2 text-sm text-foreground">
               <input
                 type="checkbox"
@@ -343,7 +343,7 @@ export default function AdminMissionsPage() {
               type="button"
               disabled={creating || Boolean(createValidationError)}
               onClick={() => void createMission()}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-70"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-70 sm:w-auto"
             >
               <PlusCircle className="h-4 w-4" />
               {creating ? "Creando..." : "Crear"}
@@ -351,7 +351,7 @@ export default function AdminMissionsPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <section className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <ImageIcon className="h-4 w-4 text-primary" />
@@ -361,7 +361,7 @@ export default function AdminMissionsPage() {
             <select
               value={selectedMissionId}
               onChange={(event) => setSelectedMissionId(event.target.value)}
-              className="h-10 rounded-lg border border-input bg-background px-3 text-sm text-foreground"
+              className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground sm:w-auto"
             >
               <option value="all">Todas las misiones</option>
               {evidenceMissions.map((mission) => (
@@ -424,7 +424,7 @@ export default function AdminMissionsPage() {
             const saveValidationError = validateMissionInput(draft)
 
             return (
-              <article key={mission.id} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <article key={mission.id} className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <input
                     value={draft.title}
@@ -445,11 +445,11 @@ export default function AdminMissionsPage() {
                   />
                 </div>
 
-                <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <div className="mt-3 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                   <button
                     type="button"
                     onClick={() => updateDraft(mission.id, { active: !draft.active })}
-                    className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-foreground hover:bg-muted"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-foreground hover:bg-muted sm:w-auto"
                   >
                     {draft.active ? <Unlock className="h-4 w-4 text-primary" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
                     {draft.active ? "Desbloqueada" : "Bloqueada"}
@@ -459,7 +459,7 @@ export default function AdminMissionsPage() {
                     type="button"
                     disabled={savingId === mission.id || Boolean(saveValidationError)}
                     onClick={() => void saveMission(mission.id)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-70"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-70 sm:w-auto"
                   >
                     <Save className="h-4 w-4" />
                     {savingId === mission.id ? "Guardando..." : "Guardar"}
@@ -477,15 +477,15 @@ export default function AdminMissionsPage() {
           onClick={() => setSelectedEvidenceIndex(null)}
         >
           <div
-            className="w-full max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+            className="w-full max-w-4xl overflow-hidden rounded-xl border border-border bg-card shadow-2xl sm:rounded-2xl"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+            <div className="flex flex-col gap-3 border-b border-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-semibold text-foreground">{selectedEvidence.guestName}</p>
                 <p className="text-xs text-muted-foreground">{selectedEvidence.missionTitle}</p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={() =>
@@ -494,7 +494,7 @@ export default function AdminMissionsPage() {
                       return current === 0 ? evidences.length - 1 : current - 1
                     })
                   }
-                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                  className="rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
                 >
                   ← Anterior
                 </button>
@@ -506,14 +506,14 @@ export default function AdminMissionsPage() {
                       return (current + 1) % evidences.length
                     })
                   }
-                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                  className="rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
                 >
                   Siguiente →
                 </button>
                 <button
                   type="button"
                   onClick={() => setSelectedEvidenceIndex(null)}
-                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                  className="rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
                 >
                   Cerrar
                 </button>
@@ -524,7 +524,7 @@ export default function AdminMissionsPage() {
               <img
                 src={selectedEvidence.evidenceImageData}
                 alt={`Evidencia ampliada de ${selectedEvidence.guestName}`}
-                className="max-h-[75vh] w-full object-contain"
+                className="max-h-[60vh] w-full object-contain sm:max-h-[75vh]"
               />
             </div>
 

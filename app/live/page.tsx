@@ -84,7 +84,7 @@ export default function LivePage() {
     <main className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-20 border-b border-border bg-card/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <div className="flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
               <Heart className="h-4 w-4 text-primary" />
@@ -114,7 +114,7 @@ export default function LivePage() {
       </header>
 
       {/* Split layout */}
-      <div className="mx-auto max-w-5xl px-4 py-6">
+      <div className="mx-auto max-w-5xl px-4 pb-28 pt-6 sm:pb-8">
         <div className="flex flex-col gap-6 lg:flex-row">
           {/* Left: Live feed */}
           <div className="flex-1">
@@ -162,7 +162,7 @@ export default function LivePage() {
 
       {/* Bottom nav */}
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-center gap-6 px-4 py-3">
+        <div className="mx-auto flex max-w-5xl items-center justify-center gap-6 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3">
           <Link href="/missions" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors">
             <Star className="h-5 w-5" />
             <span className="text-xs font-medium">Misiones</span>

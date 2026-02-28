@@ -169,18 +169,18 @@ export function MissionsContent() {
     <main className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-20 border-b border-border bg-card/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
+        <div className="mx-auto flex max-w-3xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
               <Heart className="h-4 w-4 text-primary" />
             </div>
-            <div>
-              <p className="text-sm font-semibold text-foreground">{guestName}</p>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-foreground">{guestName}</p>
               <p className="text-xs text-muted-foreground">Misionero</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <button
               type="button"
               onClick={() => void handleLogout()}
@@ -229,7 +229,7 @@ export function MissionsContent() {
       </div>
 
       {/* Mission grid */}
-      <div className="mx-auto max-w-3xl px-4 pb-8">
+      <div className="mx-auto max-w-3xl px-4 pb-28 sm:pb-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {missions.map((mission) => (
             <MissionCard
@@ -243,7 +243,7 @@ export function MissionsContent() {
 
       {/* Bottom nav hint */}
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-card/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-3xl items-center justify-center gap-6 px-4 py-3">
+        <div className="mx-auto flex max-w-3xl items-center justify-center gap-6 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3">
           <Link href="/missions" className="flex flex-col items-center gap-1 text-primary">
             <Star className="h-5 w-5" />
             <span className="text-xs font-medium">Misiones</span>
