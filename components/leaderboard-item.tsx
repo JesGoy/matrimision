@@ -3,9 +3,9 @@ import { Trophy, Star } from "lucide-react"
 import type { LeaderboardGuest } from "@/lib/types/game"
 
 const rankStyles: Record<number, { bg: string; text: string; icon: string }> = {
-  1: { bg: "bg-[oklch(0.88_0.10_80)]", text: "text-[oklch(0.40_0.10_60)]", icon: "text-[oklch(0.60_0.12_60)]" },
-  2: { bg: "bg-[oklch(0.90_0.01_250)]", text: "text-[oklch(0.45_0.02_250)]", icon: "text-[oklch(0.55_0.03_250)]" },
-  3: { bg: "bg-[oklch(0.85_0.06_55)]", text: "text-[oklch(0.45_0.06_55)]", icon: "text-[oklch(0.55_0.06_55)]" },
+  1: { bg: "bg-primary/20", text: "text-primary", icon: "text-primary" },
+  2: { bg: "bg-secondary", text: "text-secondary-foreground", icon: "text-secondary-foreground" },
+  3: { bg: "bg-accent", text: "text-accent-foreground", icon: "text-accent-foreground" },
 }
 
 function getInitials(name: string) {

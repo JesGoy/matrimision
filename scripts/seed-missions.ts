@@ -1,61 +1,72 @@
+import { loadEnvConfig } from "@next/env"
+
 import { missions } from "../db/schema"
 import { getDb } from "../lib/db"
+
+loadEnvConfig(process.cwd())
 
 const seedMissions = [
   {
     id: "11111111-1111-4111-8111-111111111111",
-    title: "Selfie con los novios",
-    description: "Tomate una selfie con la pareja y comparte el momento.",
+    title: "Foto con alguien nuevo",
+    description: "Sácate una foto con alguien que no conocías antes del matrimonio y súbela a nuestro álbum compartido.",
     points: 20,
     active: true,
   },
   {
     id: "22222222-2222-4222-8222-222222222222",
-    title: "Primer baile",
-    description: "Graba un video del primer baile de los novios.",
+    title: "Canta en el karaoke",
+    description: "Canta una canción en el karaoke.",
     points: 15,
     active: true,
   },
   {
     id: "33333333-3333-4333-8333-333333333333",
-    title: "Mensaje en el libro",
-    description: "Deja un mensaje especial en el libro de invitados.",
+    title: "Baila con alguien",
+    description: "Baila con tu pareja o con alguien que no conocías.",
     points: 10,
     active: true,
   },
   {
     id: "44444444-4444-4444-8444-444444444444",
-    title: "Foto grupal",
-    description: "Participa en la foto grupal con todos los invitados.",
+    title: "Foto de tu comida favorita",
+    description: "Sácate una foto con la comida que más te gustó del matrimonio y súbela a nuestro álbum compartido.",
     points: 25,
     active: true,
   },
   {
     id: "55555555-5555-4555-8555-555555555555",
-    title: "Brindis especial",
-    description: "Haz un brindis dedicado a los novios.",
-    points: 30,
-    active: false,
+    title: "Enciende una vela",
+    description: "Cuando sea la hora de las velas, enciende una.",
+    points: 15,
+    active: true,
   },
   {
     id: "66666666-6666-4666-8666-666666666666",
-    title: "Ramo de la novia",
-    description: "Participa en el lanzamiento del ramo.",
+    title: "Foto en la cabina",
+    description: "Tómate una foto en la cabina fotográfica.",
     points: 20,
-    active: false,
+    active: true,
   },
   {
     id: "77777777-7777-4777-8777-777777777777",
-    title: "Pista de baile",
-    description: "Se el primero en abrir la pista de baile.",
+    title: "Foto de los novios",
+    description: "Sube cualquier foto de los novios al álbum.",
     points: 15,
     active: true,
   },
   {
     id: "88888888-8888-4888-8888-888888888888",
-    title: "Historia de amor",
-    description: "Cuenta como conociste a los novios en una historia breve.",
+    title: "Dedicatoria para los novios",
+    description: "Dale unas palabras a los novios o deja una dedicatoria escrita.",
     points: 20,
+    active: true,
+  },
+  {
+    id: "99999999-9999-4999-8999-999999999999",
+    title: "Autorretrato en el lienzo",
+    description: "Haz tu autorretrato en el lienzo de los novios.",
+    points: 25,
     active: true,
   },
 ] as const

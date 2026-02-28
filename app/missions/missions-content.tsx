@@ -62,13 +62,13 @@ export function MissionsContent() {
   const completedCount = missions.filter((m) => m.status === "completed").length
   const progressPercent = missions.length > 0 ? Math.round((completedCount / missions.length) * 100) : 0
 
-  async function handleCompleteMission(missionId: string) {
+  async function handleCompleteMission(missionId: string, evidenceImageData: string) {
     const response = await fetch("/api/missions/complete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ missionId }),
+      body: JSON.stringify({ missionId, evidenceImageData }),
     })
 
     if (response.status === 401) {
@@ -82,6 +82,8 @@ export function MissionsContent() {
     }
 
     if (!response.ok) {
+      const data = (await response.json().catch(() => ({}))) as { error?: string }
+      setError(data.error ?? "No se pudo completar la misión")
       return false
     }
 

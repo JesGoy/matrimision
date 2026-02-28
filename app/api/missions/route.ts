@@ -7,20 +7,32 @@ import { getDb } from "@/lib/db"
 
 export const runtime = "nodejs"
 
-const iconMap: Record<string, string> = {
-  "selfie con los novios": "camera",
-  "primer baile": "music",
-  "mensaje en el libro": "book",
-  "foto grupal": "users",
-  "brindis especial": "wine",
-  "ramo de la novia": "flower",
-  "pista de baile": "sparkles",
-  "historia de amor": "heart",
-}
-
 function getIconFromTitle(title: string): string {
   const normalized = title.toLowerCase()
-  return iconMap[normalized] ?? "star"
+
+  if (normalized.includes("foto") || normalized.includes("cabina") || normalized.includes("selfie")) {
+    return "camera"
+  }
+  if (normalized.includes("karaoke") || normalized.includes("canta") || normalized.includes("cancion") || normalized.includes("canción")) {
+    return "music"
+  }
+  if (normalized.includes("dedicatoria") || normalized.includes("palabras") || normalized.includes("mensaje")) {
+    return "book"
+  }
+  if (normalized.includes("alguien") || normalized.includes("pareja") || normalized.includes("grupal")) {
+    return "users"
+  }
+  if (normalized.includes("vela")) {
+    return "flower"
+  }
+  if (normalized.includes("baile") || normalized.includes("baila")) {
+    return "sparkles"
+  }
+  if (normalized.includes("novios") || normalized.includes("amor")) {
+    return "heart"
+  }
+
+  return "star"
 }
 
 export async function GET(request: NextRequest) {
@@ -75,17 +87,20 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     guest: guest[0],
     totalPoints,
-    missions: allMissions.map((mission) => ({
-      id: mission.id,
-      title: mission.title,
-      description: mission.description,
-      points: mission.points,
-      icon: getIconFromTitle(mission.title),
-      status: completedIds.has(mission.id)
-        ? "completed"
-        : mission.active
-          ? "available"
-          : "locked",
-    })),
+    missions: allMissions.map((mission) => {
+      const completed = completedIds.has(mission.id)
+      const locked = !completed && !mission.active
+
+      return {
+        id: mission.id,
+        title: locked ? "Misión secreta" : mission.title,
+        description: locked
+          ? "Pronto se desbloqueará una nueva sorpresa. Mantente atento 👀"
+          : mission.description,
+        points: locked ? 0 : mission.points,
+        icon: locked ? "star" : getIconFromTitle(mission.title),
+        status: completed ? "completed" : mission.active ? "available" : "locked",
+      }
+    }),
   })
 }

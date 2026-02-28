@@ -25,6 +25,7 @@ export const guestMissions = pgTable(
     missionId: text("mission_id")
       .notNull()
       .references(() => missions.id, { onDelete: "cascade" }),
+    evidenceImageData: text("evidence_image_data"),
     completedAt: timestamp("completed_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({

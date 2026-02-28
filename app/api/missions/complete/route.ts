@@ -11,7 +11,17 @@ export const runtime = "nodejs"
 
 const completeMissionSchema = z.object({
   missionId: z.string().uuid(),
+  evidenceImageData: z
+    .string()
+    .regex(/^data:image\/(jpeg|jpg|png|webp);base64,[a-zA-Z0-9+/=]+$/i, "Invalid image format"),
 })
+
+function getBase64Bytes(dataUrl: string): number {
+  const parts = dataUrl.split(",")
+  const base64 = parts[1] ?? ""
+  const padding = (base64.match(/=+$/)?.[0].length ?? 0)
+  return (base64.length * 3) / 4 - padding
+}
 
 export async function POST(request: NextRequest) {
   const db = getDb()
@@ -33,7 +43,12 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { missionId } = parsedBody.data
+  const { missionId, evidenceImageData } = parsedBody.data
+
+  const maxBytes = 3 * 1024 * 1024
+  if (getBase64Bytes(evidenceImageData) > maxBytes) {
+    return NextResponse.json({ error: "Image too large. Max size is 3MB" }, { status: 400 })
+  }
 
   const mission = await db
     .select({
@@ -55,6 +70,7 @@ export async function POST(request: NextRequest) {
     .values({
       guestId: session.guestId,
       missionId,
+      evidenceImageData,
     })
     .onConflictDoNothing()
     .returning({
