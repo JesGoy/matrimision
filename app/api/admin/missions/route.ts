@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
 import { missions } from "@/db/schema"
+import { isAdminRequest } from "@/lib/auth/admin"
 import { getDb } from "@/lib/db"
 
 export const runtime = "nodejs"
@@ -22,7 +23,12 @@ const updateMissionSchema = z.object({
   active: z.boolean(),
 })
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const isAdmin = await isAdminRequest(request)
+  if (!isAdmin) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
+
   const db = getDb()
 
   const allMissions = await db
@@ -40,6 +46,11 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const isAdmin = await isAdminRequest(request)
+  if (!isAdmin) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
+
   const db = getDb()
   const parsedBody = createMissionSchema.safeParse(await request.json())
 
@@ -68,6 +79,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
+  const isAdmin = await isAdminRequest(request)
+  if (!isAdmin) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
+
   const db = getDb()
   const parsedBody = updateMissionSchema.safeParse(await request.json())
 

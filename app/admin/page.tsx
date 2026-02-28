@@ -47,11 +47,19 @@ export default function AdminMissionsPage() {
   const [evidenceLoading, setEvidenceLoading] = useState(true)
   const [selectedMissionId, setSelectedMissionId] = useState<string>("all")
   const [selectedEvidenceIndex, setSelectedEvidenceIndex] = useState<number | null>(null)
+  const [forbidden, setForbidden] = useState(false)
 
   async function loadMissions() {
     setError(null)
+    setForbidden(false)
     const response = await fetch("/api/admin/missions")
     const data = (await response.json()) as { missions?: AdminMission[]; error?: string }
+
+    if (response.status === 403) {
+      setForbidden(true)
+      setLoading(false)
+      return
+    }
 
     if (!response.ok || !data.missions) {
       setError(data.error ?? "No se pudieron cargar las misiones")
@@ -230,6 +238,19 @@ export default function AdminMissionsPage() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-background">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </main>
+    )
+  }
+
+  if (forbidden) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="max-w-md rounded-2xl border border-border bg-card p-6 text-center shadow-sm">
+          <h1 className="font-serif text-2xl font-bold text-foreground">Acceso restringido</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Este panel es solo para el usuario adminBoda. Inicia sesión con ese nombre para entrar.
+          </p>
+        </div>
       </main>
     )
   }
